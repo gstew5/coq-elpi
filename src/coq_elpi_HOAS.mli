@@ -151,6 +151,7 @@ type primitive_value =
   | Projection of Projection.t
 val primitive_value : primitive_value Conversion.t
 val in_elpi_primitive : depth:int -> state -> primitive_value -> state * term
+val uinstance : Univ.Instance.t Conversion.t
 
 module GRMap : Elpi.API.Utils.Map.S with type key = Names.GlobRef.t
 module GRSet : Elpi.API.Utils.Set.S with type elt = Names.GlobRef.t
