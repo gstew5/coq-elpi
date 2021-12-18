@@ -43,6 +43,7 @@ Check nat_is_S : forall x, nat_is_nat x -> nat_is_nat (S x).
 Check nat_is_nat_full : forall x, nat_is_nat x.
 Check nat_is_nat_functor : forall x, nat_is_nat x -> nat_is_nat x.
 Check nat_induction : forall P, P 0 -> (forall n, P n -> P (S n)) -> forall x, nat_is_nat x -> P x.
+Check nat_tag : nat -> Numbers.BinNums.positive.
 
 (* ---------------------------------------------------- *)
 
@@ -65,6 +66,7 @@ Check list_param1_list_eq : forall A (PA : A -> Type),
                                  forall x, list_is_list A PA x ->
                                  forall y, list_is_list A PA y ->
                                  bool_is_bool (list_eq A f x y).
+Check list_tag : forall A, list A -> Numbers.BinNums.positive.
       
 (* ---------------------------------------------------- *)
 
@@ -84,6 +86,7 @@ Check Vector_is_cons : forall A (PA : A -> Type) (a : A), PA a -> forall n (Pn :
        Vector_is_t A PA n Pn H -> Vector_is_t A PA (S n) (nat_is_S n Pn) (Vector.cons A a n H).
 Check Vector_is_t_functor : forall A PA QA (H : forall x, PA x -> QA x), forall n nR v, Vector_is_t A PA n nR v -> Vector_is_t A QA n nR v.
 Check Vector_induction : forall A PA (P : forall n, nat_is_nat n -> Vector.t A n -> Type), P 0 nat_is_O (Vector.nil A) -> (forall a, PA a -> forall m mR, forall (v : Vector.t A m), P m mR v -> P (S m) (nat_is_S m mR) (Vector.cons A a m v)) -> forall n nR v, Vector_is_t A PA n nR v -> P n nR v.
+Check Vector_tag : forall A i, Vector.t A i -> Numbers.BinNums.positive.
 
 (* ---------------------------------------------------- *)
 
@@ -94,6 +97,7 @@ Elpi derive W.
 Fail Check W_induction : forall A (P : W A -> Type),
        (forall f, (forall x, UnitPred A x -> P (f x)) -> P (B A f)) ->
        forall x, P x.
+Check W_tag : forall A, W A -> Numbers.BinNums.positive.
 
 (* ---------------------------------------------------- *)
 
@@ -103,6 +107,7 @@ Elpi derive horror.
 Fail Check horror_induction :
    forall A a (P : forall T t, horror A a T t -> Type), 
     (forall W (_: UnitPred Type W) w (_: UnitPred _ w) (k : horror A a W w), P W w k -> P W w (K A a W w k)) -> forall T t (x : horror A a T t), P T t x.
+Check horror_tag : forall A a T t, horror A a T t -> Numbers.BinNums.positive.
 
 (* ---------------------------------------------------- *)
 

@@ -79,6 +79,7 @@ main T Prefix :-
     derive "idx2inv"        (derive.idx2inv.main T                  "_to_"),
     derive "lens"           (derive.lens.main T                     {calc (Prefix ^ "_")}),
     derive "lens_laws"      (derive.lens-laws.main T                {calc (Prefix ^ "_")}),
+    derive "tag"            (derive.tag.main T                      Prefix),
   ].
 
 pred decl+main i:indt-decl.

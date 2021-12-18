@@ -65,6 +65,7 @@ From elpi.apps Require Export
   derive.param2
   derive.lens
   derive.lens_laws
+  derive.tag
 .
 
 Elpi Command derive.
@@ -126,6 +127,12 @@ Elpi Accumulate Db derive.param2.db.
 Elpi Accumulate File "elpi/lens.elpi".
 Elpi Accumulate Db derive.lens.db.
 Elpi Accumulate File "elpi/lens_laws.elpi".
+
+Import PArith.
+Local Open Scope positive_scope.
+Elpi Accumulate Db derive.tag.db.
+Elpi Accumulate File "elpi/tag.elpi".
+Close Scope positive_scope.
 
 Elpi Accumulate File "elpi/derive.elpi".
 Elpi Accumulate lp:{{
