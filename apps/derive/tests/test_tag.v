@@ -24,7 +24,7 @@ Elpi derive.tag prim_int.
 Elpi derive.tag prim_float.
 Elpi derive.tag fo_record.
 Elpi derive.tag pa_record.
-Fail Elpi derive.tag pr_record.
+Elpi derive.tag pr_record.
 Elpi derive.tag dep_record.
 Elpi derive.tag enum.
 End Coverage.
@@ -52,4 +52,4 @@ Check large_tag : tag large.
 Check prim_int_tag : tag prim_int.
 Check prim_float_tag : tag prim_float.
 Check pa_record_tag : forall A, tag (pa_record A).
-Fail Check pr_record_tag : tag pa_record.
+Check pr_record_tag : forall A, tag (pr_record A).

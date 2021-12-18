@@ -2,7 +2,7 @@
 % not necessary, but gives pointers to relevant files
 shorten std.{ fold-map , do! , spy-do!, last }. % from elpi-builtin.elpi
 shorten coq.{ build-match , bind-ind-arity }.   % from coq-lib.elpi
-shorten coq.{ typecheck }.                      % from coq-builtin.elpi
+shorten coq.{ elaborate-skeleton }.             % from coq-builtin.elpi
 
 % if we load this file together with others files, we avoid chlashes
 namespace derive.tag {
@@ -14,12 +14,10 @@ main I Prefix CL :- do! [
 
   % build   fun params (x : I params) => ... do-match ...
   coq.env.indt I _ _ _ Arity _ _,
-  bind-ind-arity (global (indt I)) Arity do-match Body,
-
-  if (coq.env.record? I tt) (stop "tag: NYI primitive records") true,
+  bind-ind-arity (global (indt I)) Arity do-match BodyR,
 
   % typecheck (and infer univ constraints)
-  std.assert-ok! (typecheck Body Ty) "tag generates illtyped code",
+  std.assert-ok! (elaborate-skeleton BodyR Ty Body) "derive.tag generates illtyped code",
 
   % save constant
   Name is Prefix ^ "tag",
