@@ -26,3 +26,4 @@ theories/derive/induction.v
 theories/derive/lens.v
 theories/derive/lens_laws.v
 theories/derive/tag.v
+theories/derive/fields.v
