@@ -18,14 +18,14 @@ pred fields-for
 
 Elpi Command derive.fields.
 Elpi Accumulate File "elpi/fields.elpi".
-Elpi Accumulate Db elpi.tag.db.
-Elpi Accumulate Db elpi.fields.db.
+Elpi Accumulate Db derive.tag.db.
+Elpi Accumulate Db derive.fields.db.
 Elpi Accumulate lp:{{
 
   main [str S] :-
     std.assert! (coq.locate S (indt I)) "Not an inductive type",
     Prefix is S ^ "_",
-    elpi.fields.main I Prefix _.
+    derive.fields.main I Prefix _.
 
 }}.
 Elpi Typecheck.
