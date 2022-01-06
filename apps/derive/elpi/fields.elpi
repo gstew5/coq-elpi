@@ -24,7 +24,7 @@ main I Prefix CL :- std.do! [
   Name_c is Prefix ^ "construct",
   coq.env.add-const Name_c Body_c Ty_c ff Construct, 
 
-  coq.bind-ind-arity (global (indt I)) Arity (case-refl Fields Construct) Body_P,
+  coq.bind-ind-arity (global (indt I)) Arity (case-refl Tag Fields Construct) Body_P,
   std.assert-ok! (coq.typecheck Body_P Ty_P) "derive.fields generates illtyped constructP",
   Name_P is Prefix ^ "constructP",
   coq.env.add-const Name_P Body_P Ty_P @opaque! ConstructP, 
@@ -35,18 +35,19 @@ main I Prefix CL :- std.do! [
 ].
 
 % match x return construct (fields x) = Some x with _ => erefl
-pred case-refl i:constant, i:constant, i:term, i:list term, i:list term, o:term.
-case-refl Fields Construct _ ParamsX Tys R :-
+pred case-refl i:constant, i:constant, i:constant, i:term, i:list term, i:list term, o:term.
+case-refl Tag Fields Construct _ ParamsX Tys R :-
   std.appendR Params [X] ParamsX,
+  coq.mk-app (global (const Tag)) Params TP,
   coq.mk-app (global (const Fields)) Params FP,
   coq.mk-app (global (const Construct)) Params CP,
   coq.build-match X {std.last Tys}
-    (case-refl-rty FP CP)
+    (case-refl-rty TP FP CP)
     case-refl-branch
     R.
 
-pred case-refl-rty i:term, i:term, i:term, i:list term,i:list term, o:term.
-case-refl-rty Fields Construct _ Vs _ {{ lp:Construct _ (lp:Fields lp:X) = Some lp:X }} :-
+pred case-refl-rty i:term, i:term, i:term, i:term, i:list term,i:list term, o:term.
+case-refl-rty Tag Fields Construct _ Vs _ {{ lp:Construct (lp:Tag lp:X) (lp:Fields lp:X) = Some lp:X }} :-
   std.last Vs X.
 
 pred case-refl-branch i:term, i:term, i:list term,i:list term, o:term.
@@ -65,7 +66,7 @@ kty->tuple I Params {{ fun p : lib:elpi.derive.positive => lp:(R p) }} :-
 
 % match p with ... n => fun x => Kn x.1 x.2 ...
 pred fun-tuple->kapp-proj i:constant, i:inductive, i:list term, o:term.
-fun-tuple->kapp-proj C_t I Params {{ fun p : lib:elpi.derive.positive => lp:(R p) }} :-
+fun-tuple->kapp-proj C_t I Params {{ fun p : lib:elpi.derive.positive => lp:(R p) }} :- 
   coq.env.indt I _ _ _ _ KS KT,
   coq.mk-app (global (const C_t)) Params Fields_t,
   coq.mk-app (global (indt I)) Params Ind,
@@ -74,7 +75,7 @@ fun-tuple->kapp-proj C_t I Params {{ fun p : lib:elpi.derive.positive => lp:(R p
   std.zip L1 L2 L,
   @pi-decl `p` {{ lib:elpi.derive.positive }} p\
     splay-over-positive p L {{ fun x => lp:Fields_t x -> option lp:Ind }}
-      {{ fun _ => None }}
+      {{ fun (_:lib:elpi.derive.unit) => @None lp:Ind }}
       fun-tuple->kapp
       (R p).
 

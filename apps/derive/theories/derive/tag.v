@@ -17,11 +17,20 @@ Elpi Command derive.tag.
 Elpi Accumulate File "elpi/tag.elpi".
 Elpi Accumulate Db derive.tag.db.
 Elpi Accumulate lp:{{
+  main [str I, str O] :- !, 
+    coq.locate I (indt GR), 
+    Prefix is O ^ "_",
+    derive.tag.main GR Prefix _.
 
-  main [str S] :-
-    std.assert! (coq.locate S (indt I)) "Not an inductive type",
-    Prefix is S ^ "_",
-    derive.tag.main I Prefix _.
+  main [str I] :- !, 
+    coq.locate I (indt GR),
+    coq.gref->id (indt GR) Tname,
+    Prefix is Tname ^ "_",
+    derive.tag.main GR Prefix _.
+
+  main _ :- usage.
+   
+  usage :- coq.error "Usage: derive.tag <inductive name> [<prefix>]".
 
 }}.
 Elpi Typecheck.

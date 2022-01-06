@@ -20,7 +20,7 @@ Elpi derive Coverage.iota.
 Elpi derive Coverage.prim_int.
 Elpi derive Coverage.fo_record.
 Elpi derive Coverage.pa_record.
-Elpi derive Coverage.pr_record.
+Fail Elpi derive Coverage.pr_record.
 Elpi derive Coverage.dep_record.
 Elpi derive Coverage.enum.
 
@@ -43,6 +43,7 @@ Check nat_is_S : forall x, nat_is_nat x -> nat_is_nat (S x).
 Check nat_is_nat_full : forall x, nat_is_nat x.
 Check nat_is_nat_functor : forall x, nat_is_nat x -> nat_is_nat x.
 Check nat_induction : forall P, P 0 -> (forall n, P n -> P (S n)) -> forall x, nat_is_nat x -> P x.
+
 Check nat_tag : nat -> Numbers.BinNums.positive.
 Check nat_fields_t : Numbers.BinNums.positive -> Type. 
 Check nat_fields : forall (n:nat), nat_fields_t (nat_tag n). 
@@ -80,7 +81,7 @@ Check list_constructP : forall (A:Type) (l:list A), list_construct A (list_tag A
 
 Require Vector.
 
-Elpi derive Vector.t Vector_.
+Elpi derive Vector.t Vector.
 Check Vector_eq : forall A, (A -> A -> bool) -> forall n, Vector.t A n -> Vector.t A n -> bool.
 Check Vector_isk_nil : forall A n, Vector.t A n -> bool.
 Check Vector_isk_cons : forall A n, Vector.t A n -> bool. 
