@@ -18,11 +18,11 @@ Elpi derive Coverage.beta.
 Elpi derive Coverage.iota.
 (* Elpi derive Coverage.large. search slow *)
 Elpi derive Coverage.prim_int.
-Fail Elpi derive Coverage.fo_record.
-Fail Elpi derive Coverage.pa_record.
+Elpi derive Coverage.fo_record.
+Elpi derive Coverage.pa_record.
 Fail Elpi derive Coverage.pr_record.
 Elpi derive Coverage.dep_record.
-Fail Elpi derive Coverage.enum.
+Elpi derive Coverage.enum.
 
 (* ---------------------------------------------------- *)
 

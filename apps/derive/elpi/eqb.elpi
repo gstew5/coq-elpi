@@ -15,6 +15,7 @@ main I Prefix CL :- std.do! [
   EQBF = global (const C),
   
   % the fix
+
   do-params N Arity Ind EQBF R1,
   std.assert-ok! (coq.typecheck R1 R1ty) "derive.eqb generates illtyped term",
   Name1 is Prefix ^ "eqb",
@@ -33,11 +34,18 @@ do-params N {{ forall x : lp:T, lp:(F x) }} I EF {{ fun (x : lp:T) (eqx : x -> x
   @pi-decl `x` T x\
   @pi-decl `eqx` {{ lp:x -> lp:x -> bool }} eqx\
     do-params M (F x) {coq.mk-app I [x]} {coq.mk-app EF [x,eqx]} (R x eqx).
+/* FIXME: ICI */
 do-params 0 _ I EF {{ fix rec (x1 x2 : lp:I) {struct x1} : bool := lp:(R rec x1 x2) }} :-
+  coq.safe-dest-app I (global (indt Ind)) _, coq.env.recursive? Ind, !,
   @pi-decl `rec` {{ lp:I -> lp:I -> bool }} rec\
   @pi-decl `x1` I x1\
   @pi-decl `x2` I x2\
     do-match x1 I x2 {coq.mk-app EF [rec]} (R rec x1 x2).
+
+do-params 0 _ I EF {{ fun (x1 x2 : lp:I) => lp:(R x1 x2) }} :-
+  @pi-decl `x1` I x1\
+  @pi-decl `x2` I x2\
+    do-match x1 I x2 {coq.mk-app EF [{{fun (_ _ : lp:I) => true}}]} (R x1 x2).
 
 pred do-match i:term, i:term, i:term, i:term, o:term.
 do-match X1 I X2 F R :-

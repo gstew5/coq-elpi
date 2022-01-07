@@ -34,6 +34,8 @@ dep1 "eqK" "isK".
 dep1 "bcongr" "projK".
 dep1 "idx2inv" "invert".
 dep1 "eq_param1" "eq".
+dep1 "fields" "tag".
+dep1 "eqb" "fields".
 
 pred selected i:string.
 selected Name :- get-option "only" Map, !,
