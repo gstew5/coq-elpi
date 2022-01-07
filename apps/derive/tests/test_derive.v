@@ -18,11 +18,11 @@ Elpi derive Coverage.beta.
 Elpi derive Coverage.iota.
 (* Elpi derive Coverage.large. search slow *)
 Elpi derive Coverage.prim_int.
-Elpi derive Coverage.fo_record.
-Elpi derive Coverage.pa_record.
+Fail Elpi derive Coverage.fo_record.
+Fail Elpi derive Coverage.pa_record.
 Fail Elpi derive Coverage.pr_record.
 Elpi derive Coverage.dep_record.
-Elpi derive Coverage.enum.
+Fail Elpi derive Coverage.enum.
 
 (* ---------------------------------------------------- *)
 
@@ -49,7 +49,7 @@ Check nat_fields_t : Numbers.BinNums.positive -> Type.
 Check nat_fields : forall (n:nat), nat_fields_t (nat_tag n). 
 Check nat_construct : forall (p: Numbers.BinNums.positive),  nat_fields_t p -> option nat.
 Check nat_constructP : forall (n:nat), nat_construct (nat_tag n) (nat_fields n) = Some n.
-
+Check nat_eqb : nat -> nat -> bool.
 (* ---------------------------------------------------- *)
 
 Elpi derive.param1 andb.
@@ -76,6 +76,7 @@ Check list_fields_t : Type -> Numbers.BinNums.positive -> Type.
 Check list_fields : forall (A:Type) (l:list A), list_fields_t A (list_tag A l). 
 Check list_construct : forall (A:Type) (p: Numbers.BinNums.positive),  list_fields_t A p -> option (list A).
 Check list_constructP : forall (A:Type) (l:list A), list_construct A (list_tag A l) (list_fields A l) = Some l.
+Check list_eqb : forall A, (A -> A -> bool) -> list A -> list A -> bool.
       
 (* ---------------------------------------------------- *)
 
@@ -96,12 +97,11 @@ Check Vector_is_cons : forall A (PA : A -> Type) (a : A), PA a -> forall n (Pn :
 Check Vector_is_t_functor : forall A PA QA (H : forall x, PA x -> QA x), forall n nR v, Vector_is_t A PA n nR v -> Vector_is_t A QA n nR v.
 Check Vector_induction : forall A PA (P : forall n, nat_is_nat n -> Vector.t A n -> Type), P 0 nat_is_O (Vector.nil A) -> (forall a, PA a -> forall m mR, forall (v : Vector.t A m), P m mR v -> P (S m) (nat_is_S m mR) (Vector.cons A a m v)) -> forall n nR v, Vector_is_t A PA n nR v -> P n nR v.
 Check Vector_tag : forall A i, Vector.t A i -> Numbers.BinNums.positive.
-(*
 Check Vector_fields_t : Type -> Numbers.BinNums.positive -> Type. 
-Check Vector_fields : forall (A:Type) (l:Vector.t A n), Vector_fields_t A (Vector_tag A l). 
-Check Vector_construct : forall (A:Type) (p: Numbers.BinNums.positive),  Vector_fields_t A p -> option (Vector A).
-Check Vector_constructP : forall (A:Type) (l:Vector.t A), Vector_construct A (Vector_tag A l) (Vector_fields A l) = Some l.
-*)
+Fail Check Vector_fields : forall (A:Type) (n:nat) (l:Vector.t A n), Vector_fields_t A (Vector_tag A l). 
+Fail Check Vector_construct : forall (A:Type) (p: Numbers.BinNums.positive),  Vector_fields_t A p -> option (Vector A).
+Fail Check Vector_constructP : forall (A:Type) (l:Vector.t A), Vector_construct A (Vector_tag A l) (Vector_fields A l) = Some l.
+Fail Check Vector_eqb : forall A, (A -> A -> bool) -> forall n, Vector.t A n -> Vector.t A n -> bool.
 
 (* ---------------------------------------------------- *)
 
@@ -117,8 +117,6 @@ Check W_fields_t : Type -> Numbers.BinNums.positive -> Type.
 Check W_fields : forall (A:Type) (l:W A), W_fields_t A (W_tag A l). 
 Check W_construct : forall (A:Type) (p: Numbers.BinNums.positive),  W_fields_t A p -> option (W A).
 Check W_constructP : forall (A:Type) (l:W A), W_construct A (W_tag A l) (W_fields A l) = Some l.
-
-
 
 (* ---------------------------------------------------- *)
 
@@ -144,7 +142,7 @@ Check XXX_fields_t : Type -> Numbers.BinNums.positive -> Type.
 Check XXX_fields : forall (A:Type) (l:rtree A), XXX_fields_t A (XXX_tag A l). 
 Check XXX_construct : forall (A:Type) (p: Numbers.BinNums.positive),  XXX_fields_t A p -> option (rtree A).
 Check XXX_constructP : forall (A:Type) (l:rtree A), XXX_construct A (XXX_tag A l) (XXX_fields A l) = Some l.
-
+Check XXX_eqb : forall (A:Type), (A -> A -> bool) -> rtree A -> rtree A -> bool.
 (* bug #270 *)
 
 derive

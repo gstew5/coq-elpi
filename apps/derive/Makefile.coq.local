@@ -21,7 +21,8 @@ theories/derive/param2.vo: elpi/param2.elpi paramX-lib.elpi
 theories/derive/lens.vo: elpi/lens.elpi
 theories/derive/lens_laws.vo: elpi/lens_laws.elpi
 theories/derive/tag.vo: elpi/tag.elpi
-theories/derive/fields.vo: elpi/fields.elpi
+theories/derive/fields.vo: elpi/tag.elpi elpi/fields.elpi
+theories/derive/eqb.vo: elpi/tag.elpi elpi/fields.elpi elpi/eqb.elpi
 
 coverage:
 	@for F in $(wildcard theories/derive/*.v); do\
