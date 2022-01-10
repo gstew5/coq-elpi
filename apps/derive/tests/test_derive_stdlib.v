@@ -77,4 +77,13 @@ Record dep_record := { f5 : peano; f6 : vect unit f5; }.
 
 Variant enum := E1 | E2 | E3.
 
+Definition is_zero (n:peano) : bool := 
+  match n with 
+  | Zero => true 
+  | _ => false
+  end.
+
+
+Record sigma_bool := { depn : peano; depeq : is_zero depn = true }.
+
 End Coverage.

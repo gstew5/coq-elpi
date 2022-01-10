@@ -15,7 +15,7 @@ Elpi derive.fields rose.
 Fail Elpi derive.fields nest.
 Elpi derive.fields w.
 Fail Elpi derive.fields vect.
-Fail Elpi derive.fields dyn.
+Elpi derive.fields dyn.
 Fail Elpi derive.fields zeta.
 Elpi derive.fields beta.
 Fail Elpi derive.fields iota.
@@ -25,8 +25,9 @@ Elpi derive.fields prim_float.
 Elpi derive.fields fo_record.
 Elpi derive.fields pa_record.
 Fail Elpi derive.fields pr_record. (* fixme elaborate *)
-Fail Elpi derive.fields dep_record.
+Elpi derive.fields dep_record.
 Elpi derive.fields enum.
+Elpi derive.fields sigma_bool.
 End Coverage.
 
 Import Coverage.
@@ -82,10 +83,10 @@ Fail Check vect_fields : forall (A:Type) (l:vect A), vect_fields_t A (vect_tag A
 Fail Check vect_construct : forall (A:Type) (p: Numbers.BinNums.positive),  vect_fields_t A p -> Datatypes.option (vect A).
 Fail Check vect_constructP : forall (A:Type) (l:vect A), vect_construct A (vect_tag A l) (vect_fields A l) = Datatypes.Some l.
 
-Fail Check dyn_fields_t : positive -> Type. 
-Fail Check dyn_fields : forall (n:dyn), dyn_fields_t (dyn_tag n). 
-Fail Check dyn_construct : forall (p: positive),  dyn_fields_t p -> Datatypes.option dyn.
-Fail Check dyn_constructP : forall (n:dyn), dyn_construct (dyn_tag n) (dyn_fields n) = Datatypes.Some n.
+Check dyn_fields_t : positive -> Type. 
+Check dyn_fields : forall (n:dyn), dyn_fields_t (dyn_tag n). 
+Check dyn_construct : forall (p: positive),  dyn_fields_t p -> Datatypes.option dyn.
+Check dyn_constructP : forall (n:dyn), dyn_construct (dyn_tag n) (dyn_fields n) = Datatypes.Some n.
 
 Fail Check zeta_fields_t : Type -> Numbers.BinNums.positive -> Type. 
 Fail Check zeta_fields : forall (A:Type) (l:zeta A), zeta_fields_t A (zeta_tag A l). 
@@ -127,6 +128,10 @@ Fail Check pr_record_fields : forall (A:Type) (l:pr_record A), pr_record_fields_
 Fail Check pr_record_construct : forall (A:Type) (p: Numbers.BinNums.positive),  pr_record_fields_t A p -> Datatypes.option (pr_record A).
 Fail Check pr_record_constructP : forall (A:Type) (l:pr_record A), pr_record_construct A (pr_record_tag A l) (pr_record_fields A l) = Datatypes.Some l.
 
+Check sigma_bool_fields_t :  Numbers.BinNums.positive -> Type. 
+Check sigma_bool_fields : forall (l:sigma_bool), sigma_bool_fields_t (sigma_bool_tag l). 
+Check sigma_bool_construct : forall (p: Numbers.BinNums.positive),  sigma_bool_fields_t p -> Datatypes.option sigma_bool.
+Check sigma_bool_constructP : forall (l:sigma_bool), sigma_bool_construct (sigma_bool_tag l) (sigma_bool_fields l) = Datatypes.Some l.
 
 
 

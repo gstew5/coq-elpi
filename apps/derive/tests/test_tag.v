@@ -27,6 +27,7 @@ Elpi derive.tag pa_record.
 Elpi derive.tag pr_record.
 Elpi derive.tag dep_record.
 Elpi derive.tag enum.
+Elpi derive.tag sigma_bool.
 End Coverage.
 
 Import Coverage.

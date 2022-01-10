@@ -84,10 +84,16 @@ fun-tuple->kapp (pr K Ty) {{ fun p => lp:(R p) }} :-
   @pi-decl `p` _ p\ tuple->kapp Ty K p (R p).
 
 pred tuple->kapp i:term, i:term, i:term, o:term.
+
+tuple->kapp (prod N T F) K P R :- F = (x\prod _ _ _), (pi x\ occurs x (F x)),!, % not the last one and dependent 
+  @pi-decl N T x\ tuple->kapp (F x) {coq.mk-app K [{{ projT1 lp:P }}]} {{ projT2 lp:P }} R.
+
 tuple->kapp (prod N T F) K P R :- F = (x\prod _ _ _), !, % not the last one
   @pi-decl N T x\ tuple->kapp (F x) {coq.mk-app K [{{ fst lp:P }}]} {{ snd lp:P }} R.
+
 tuple->kapp (prod N T F) K P R :-
-  @pi-decl N T x\ tuple->kapp (F x) {coq.mk-app K [P]} {{ snd lp:P }} R.
+  @pi-decl N T x\ tuple->kapp (F x) {coq.mk-app K [P]} {{ (* dummy value *) lp:P }} R.
+
 tuple->kapp _ K _ {{ Some lp:K }}.
 
 pred splay-over-positive i:term, i:list A, i:term,  i:term, i:(A -> term -> prop), o:term.
@@ -116,6 +122,9 @@ do-branch PCtx DoRty DoBranch Def [_|KS] {{ xI }} _ [P] _ R :-
 do-branch _ _ DoBranch _ [X|_] {{ xH }} _ _ _ R :- DoBranch X R.
 
 pred prod->tuple i:term, o:term.
+prod->tuple (prod N Ty F) {{ { x:lp:Ty & lp:(X x)}%type }} :- 
+  (F = x\prod _ _ _), (pi x\ occurs x (F x)), !, % not the last one and dependent
+  @pi-decl N Ty x\ prod->tuple (F x) (X x).
 prod->tuple (prod N Ty F) {{ (lp:Ty * lp:X)%type }} :- (F = x\prod _ _ _), !, % not the last one
   @pi-decl N Ty x\ prod->tuple (F x) X.
 prod->tuple (prod _ Ty _) Ty.
@@ -135,8 +144,12 @@ do-rty_t C_t Tag _ Vars _ {{ lp:C_t (lp:Tag lp:X) }} :- std.last Vars X.
 pred args->tuple i:term, i:term, i:list term, i:list term, o:term.
 args->tuple _ _ [] _ {{ tt }}.
 args->tuple _ _ [X] _ X.
-args->tuple A B [X|XS] C {{ ( lp:X , lp:R ) }} :-
-  args->tuple A B XS C R.
+args->tuple A B [X|XS] [T|TS] {{ @existT lp:T _ lp:X lp:R }} :-
+  occurs X TS, !,           
+  args->tuple A B XS TS R.
+args->tuple A B [X|XS] [_T|TS] {{ ( lp:X , lp:R ) }} :-
+  args->tuple A B XS TS R.
+
 
 % TODO: move in coq-lib.elpi
 pred coq.bind-ind-parameters i:inductive, i:(term -> list term -> list term -> term -> prop), o:term.

@@ -23,6 +23,8 @@ theories/derive/lens_laws.vo: elpi/lens_laws.elpi
 theories/derive/tag.vo: elpi/tag.elpi
 theories/derive/fields.vo: elpi/tag.elpi elpi/fields.elpi
 theories/derive/eqb.vo: elpi/tag.elpi elpi/fields.elpi elpi/eqb.elpi
+theories/derive/eqb.vo: elpi/tag.elpi elpi/fields.elpi elpi/eqb.elpi
+theories/derive/eqbcorrect.vo : elpi/tag.elpi elpi/fields.elpi elpi/induction.elpi elpi/param1_inhab.elpi elpi/eqbcorrect.elpi 
 
 coverage:
 	@for F in $(wildcard theories/derive/*.v); do\

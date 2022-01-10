@@ -65,9 +65,11 @@ From elpi.apps Require Export
   derive.param2
   derive.lens
   derive.lens_laws
+  derive.eqb_core_defs
   derive.tag
   derive.fields
   derive.eqb
+  derive.eqbcorrect
 .
 
 Elpi Command derive.
@@ -138,6 +140,9 @@ Elpi Accumulate Db derive.fields.db.
 Elpi Accumulate File "elpi/fields.elpi".
 Elpi Accumulate Db derive.eqb.db.
 Elpi Accumulate File "elpi/eqb.elpi".
+Elpi Accumulate File "../../elpi/elpi-ltac.elpi".
+Elpi Accumulate Db derive.eqbcorrect.db.
+Elpi Accumulate File "elpi/eqbcorrect.elpi".
 Close Scope positive_scope.
 
 Elpi Accumulate File "elpi/derive.elpi".
