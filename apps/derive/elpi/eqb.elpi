@@ -135,7 +135,7 @@ do-fields.aux {{ lp:T -> _ }} P1 P2 X :-
   coq.mk-app EQB [P1, P2] X.
 
 do-fields.aux {{ unit }} _ _ {{ true }}.
-do-fields.aux T _ _ {{ true }}. % :- coq.error "no comparison for" T.
+do-fields.aux _T _ _ {{ true }}. % :- coq.error "no comparison for" T.
 
 % example:
 %   eqb-fields {{ list lp:A }} {{ @list_eqb_fields lp:A lp:EA lp:ELA }} :-

@@ -20,9 +20,11 @@ main I Prefix [CL] :- std.do! [
 
   induction-db I Indu,
   reali (global (indt I)) IR, % param1-db, really
-
+  coq.typecheck Indu ITy _,
+  coq.say {coq.term->string ITy},
   add-indu-correct TI Indu IR Lt-correct R,
   std.assert-ok! (coq.typecheck R Ty) "fail demande a JC", 
+  coq.say {coq.term->string R},
   Name is Prefix ^ "eqb_correct",
   coq.env.add-const Name R Ty @opaque! Correct,
 
@@ -58,18 +60,7 @@ coq.ctx->string (def X _ Ty B) R :- R is {coq.term->string X} ^ " : " ^ {coq.ter
 /************************** correct *********************************************/
 
 /* Build the type */
-/*
-pred add-decl-correct-ty i:string, i:int, i:inductive, i:term, i:constructor, o:term.
-add-decl-correct-ty Prefix N I KT K R /*(global (const P))*/ :- std.do![  
-  do-params-correct-ty N KT (global (indt I)) (global (indc K)) R,
-  coq.term->string R RS,
-  coq.say "R=" RS,
-  std.assert-ok! (coq.typecheck R Ty) "R casse",
-  Name is Prefix ^ "eqb_correct_on_" ^ {coq.gref->id (indc K)} ^ "_t",
-  coq.env.add-const Name R Ty @opaque! P,
-  % coq.say {gettimeofday} ".",
-].
-*/
+
 pred do-params-correct-ty i:int, i:term, i:term, i:term, o:term.
 do-params-correct-ty 0 T I K R :- !, 
   eqb-for I Cmp,
@@ -162,11 +153,12 @@ add-indu-correct (prod N T F) Indu IR LS {{ fun (a : lp:T) (eqA : a -> a -> bool
      {{ lp:IR lp:a (@eqb_correct_on lp:a lp:eqA)}} 
      {std.map LS (t\coq.mk-app t [a, eqA])} (R a eqA eqAc).
 
-add-indu-correct _T Indu IR LS {{ fun x => lp:(R x) }} :- 
+add-indu-correct T Indu IR LS {{ fun x => lp:(R x) }} :- 
   std.assert! (param1-inhab-db IR Is_full) "not trivially inhabited",
+  eqb-for T Cmp,
   @pi-decl `x` _ x\
     std.append LS [x, app[Is_full,x]] (Args x),
-    R x = app [Indu, _ | Args x].
+    R x = app [Indu, {{ eqb_correct_on lp:Cmp }} | Args x].
   
 /******************************** Refl **************************************************************/
 pred add-decl-refl i:string, i:int, i:term, i:constructor, o:term.

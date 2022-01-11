@@ -87,7 +87,7 @@ main T Prefix :-
     derive "tag"            (derive.tag.main T                      Prefix),
     derive "fields"         (derive.fields.main T                   Prefix),
     derive "eqb"            (derive.eqb.main T                      Prefix),
- %   derive "eqbcorrect"     (derive.eqbcorrect.main T               Prefix),
+    derive "eqbcorrect"     (derive.eqbcorrect.main T               Prefix),
 
   ].
 

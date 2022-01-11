@@ -30,10 +30,8 @@ Elpi derive.eqb pa_record.
 Fail Elpi derive.eqb pr_record. (* fixme elaborate *)
 Elpi derive.eqb dep_record.
 Elpi derive.eqb enum.
-Elpi Trace "eqb-for".
 Elpi derive.eqb sigma_bool.
 End Coverage.
-
 Import Coverage.
 Import PArith.
 

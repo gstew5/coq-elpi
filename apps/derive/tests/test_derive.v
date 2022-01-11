@@ -2,7 +2,7 @@ From elpi.apps Require Import derive.
 
 From elpi.apps Require Import test_derive_stdlib.
 
-Elpi derive Coverage.empty.
+(* Elpi derive Coverage.empty. *)
 Elpi derive Coverage.unit.
 Elpi derive Coverage.peano.
 Elpi derive Coverage.option.
@@ -50,6 +50,8 @@ Check nat_fields : forall (n:nat), nat_fields_t (nat_tag n).
 Check nat_construct : forall (p: Numbers.BinNums.positive),  nat_fields_t p -> option nat.
 Check nat_constructP : forall (n:nat), nat_construct (nat_tag n) (nat_fields n) = Some n.
 Check nat_eqb : nat -> nat -> bool.
+Fail Check nat_eqb_correct. 
+Fail Check nat_eqb_refl.
 (* ---------------------------------------------------- *)
 
 Elpi derive.param1 andb.
@@ -77,7 +79,8 @@ Check list_fields : forall (A:Type) (l:list A), list_fields_t A (list_tag A l).
 Check list_construct : forall (A:Type) (p: Numbers.BinNums.positive),  list_fields_t A p -> option (list A).
 Check list_constructP : forall (A:Type) (l:list A), list_construct A (list_tag A l) (list_fields A l) = Some l.
 Check list_eqb : forall A, (A -> A -> bool) -> list A -> list A -> bool.
-      
+Fail Check list_eqb_correct.   
+Fail Check list_eqb_refl.      
 (* ---------------------------------------------------- *)
 
 Require Vector.

@@ -6,8 +6,8 @@ Ltac eqb_correct_on__solver :=
     try case/andP; 
     match reverse goal with 
     | H : @eqb_correct_on _ _ _ |- _ => move=> /=/H{H}-> 
-    end => //;
-    f_equal => //; apply (@UIP_dec bool Bool.bool_dec).
+    end => // (*;
+    f_equal => //; apply (@UIP_dec bool Bool.bool_dec) *)
   ).
 
 Ltac eqb_refl_on__solver :=
