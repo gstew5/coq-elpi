@@ -54,21 +54,25 @@ do-match X1 I X2 F R :-
     (do-branch X2 F)
     R.
 
-pred do-branch i:term, i:term, i:term, i:term, i:list term, i:A, o:term.
-do-branch X2 F K KTY Vars _ {{ @eqb_core_defs.eqb_body _ _ _ lp:FLDP lp:F lp:TAG lp:X lp:X2 }} :- std.do! [
+pred do-branch i:term, i:term, i:term, i:term, i:list term, i:list term, o:term.
+do-branch X2 F K KTY Vars VarsT {{ @eqb_core_defs.eqb_body _ _ _ lp:FLDP lp:F lp:TAG lp:X lp:X2 }} :- std.do! [
   coq.safe-dest-app KTY (global (indt I)) Params,
   fields-for I _ FLD _ _,
   tag-for I T,
   coq.mk-app (global (const FLD)) Params FLDP,
   coq.mk-app (global (const T)) Params TA,
   coq.mk-app TA [{coq.mk-app K Vars}] TAG,
-  to-tuple Vars X,
+  to-tuple Vars VarsT X,
 ].
 
-pred to-tuple i:list term, o:term.
-to-tuple [] {{ tt }}.
-to-tuple [X] X.
-to-tuple [X|XS] {{ ( lp:X, lp:R ) }} :- to-tuple XS R.
+pred to-tuple i:list term, i:list term, o:term.
+to-tuple [] [] {{ tt }}.
+to-tuple [X] [_] X.
+to-tuple [X|XS] [T|TS] {{ @existT lp:T _ lp:X lp:R }} :- occurs X TS, !, 
+   to-tuple XS TS R.
+to-tuple [X|XS] [_T|TS] {{ ( lp:X, lp:R ) }} :-
+   to-tuple XS TS R .
+
 
 % example: eqb-for {{ list lp:A }} {{ @list_eqb lp:A lp:F }} :- eqb-for A F.
 pred do-clause i:int, i:term, i:term, i:term, i:list prop, o:prop.
@@ -112,10 +116,17 @@ do-fields Ty {{ fun a b => lp:(R a b) }} :-
   do-fields.aux Ty x y (R x y).
 
 pred do-fields.aux i:term, i:term, i:term, o:term.
-do-fields.aux {{ forall p : lp:T, lp:(F p) }} P1 P2 {{ lib:elpi.andb lp:X lp:R }} :- F = (x\prod _ _ _), !, % not the last one
+do-fields.aux {{ forall p : lp:T, lp:(F p) }} P1 P2 {{ lib:elpi.andb lp:X lp:R }} :- 
+  F = (x\prod _ _ _), (pi x\ occurs x (F x)), !, % not the last one and dependent
+  eqb-for T EQB,
+  X = {{ lp:EQB (projT1 lp:P1) (projT1 lp:P2) }},
+  @pi-decl `p` T n\
+    do-fields.aux (F n) {{ projT2 lp:P1 }} {{ projT2 lp:P2 }} R.
+
+do-fields.aux {{ forall p : lp:T, lp:(F p) }} P1 P2 {{ lib:elpi.andb lp:X lp:R }} :- 
+ F = (x\prod _ _ _), !, % not the last one and not dependent
   eqb-for T EQB,
   X = {{ lp:EQB (fst lp:P1) (fst lp:P2) }},
-  (pi x\ if (occurs x (F x)) (coq.error "dependent type not supported yet") true),
   @pi-decl `p` T n\
     do-fields.aux (F n) {{ snd lp:P1 }} {{ snd lp:P2 }} R.
 
@@ -123,7 +134,8 @@ do-fields.aux {{ lp:T -> _ }} P1 P2 X :-
   eqb-for T EQB,
   coq.mk-app EQB [P1, P2] X.
 
-do-fields.aux _ _ _ {{ true }}.
+do-fields.aux {{ unit }} _ _ {{ true }}.
+do-fields.aux T _ _ {{ true }}. % :- coq.error "no comparison for" T.
 
 % example:
 %   eqb-fields {{ list lp:A }} {{ @list_eqb_fields lp:A lp:EA lp:ELA }} :-

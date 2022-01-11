@@ -19,7 +19,7 @@ Fail Elpi derive.eqb dyn.
 Fail Elpi derive.eqb zeta.
 Elpi derive.eqb beta.
 Fail Elpi derive.eqb iota.
-Elpi derive.eqb large.
+(* Elpi derive.eqb large. *)
 (* TODO move this else where *)
 (* Elpi Accumulate derive.eqb.db lp:{{eqb-for {{PrimInt63.int}} {{PrimInt63.eqb}}. }}. *)
 (* Elpi Accumulate derive.eqb.db lp:{{eqb-for {{PrimFloat.int}} {{PrimFloat.eqb}}. }}. *)
@@ -28,8 +28,10 @@ Elpi derive.eqb prim_float.
 Elpi derive.eqb fo_record.
 Elpi derive.eqb pa_record.
 Fail Elpi derive.eqb pr_record. (* fixme elaborate *)
-Fail Elpi derive.eqb dep_record.
+Elpi derive.eqb dep_record.
 Elpi derive.eqb enum.
+Elpi Trace "eqb-for".
+Elpi derive.eqb sigma_bool.
 End Coverage.
 
 Import Coverage.
@@ -51,7 +53,7 @@ Fail Check dyn_eqb.
 Fail Check zeta_eqb : forall A, eq_test A -> eq_test (zeta A).
 Check beta_eqb : forall A, eq_test A -> eq_test (beta A).
 Fail Check iota_eqb : eq_test iota.
-Check large_eqb   : eq_test large.
+(* Check large_eqb   : eq_test large. *)
 (* FIXME : the definition of prim_int_eqb_fields*)
 Check prim_int_eqb    : eq_test prim_int.
 Check prim_float_eqb    : eq_test prim_float.
@@ -60,4 +62,4 @@ Check fo_record_eqb : eq_test fo_record.
 Check pa_record_eqb : forall A, eq_test A -> eq_test (pa_record A).
 Fail Check pr_record_eqb : forall A, eq_test A -> eq_test (pr_record A).
 Check enum_eqb : eq_test enum.
-
+Check sigma_bool_eqb : eq_test sigma_bool.
