@@ -140,7 +140,6 @@ Elpi Accumulate Db derive.fields.db.
 Elpi Accumulate File "elpi/fields.elpi".
 Elpi Accumulate Db derive.eqb.db.
 Elpi Accumulate File "elpi/eqb.elpi".
-Elpi Accumulate File "../../elpi/elpi-ltac.elpi".
 Elpi Accumulate Db derive.eqbcorrect.db.
 Elpi Accumulate File "elpi/eqbcorrect.elpi".
 Close Scope positive_scope.
