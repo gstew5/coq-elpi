@@ -1,11 +1,13 @@
 From Coq Require Import ssreflect ssrfun ssrbool Eqdep_dec.
-From elpi Require Import elpi induction param1_inhab eqb_core_defs tag fields eqb.
+From elpi Require Import elpi.
+From elpi.apps.derive Require Import induction param1_inhab eqb_core_defs tag fields eqb.
 
+Export eqb_core_defs. (* go ask the ltac gurus... *)
 Ltac eqb_correct_on__solver :=
   by repeat (
     try case/andP; 
     match reverse goal with 
-    | H : @eqb_core_defs.eqb_correct_on _ _ _ |- _ => move=> /=/H{H}->    (* FIXME Enrico : it does not work (in test_eqbcorrect) if we remove use the long path: i.e @eqb_core_defs.eqb_correct_on *)
+    | H : @eqb_correct_on _ _ _ |- _ => move=> /=/H{H}->
     end (*;
     f_equal => //; apply (@UIP_dec bool Bool.bool_dec) *)
   ).
