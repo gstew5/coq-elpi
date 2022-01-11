@@ -5,8 +5,8 @@ Ltac eqb_correct_on__solver :=
   by repeat (
     try case/andP; 
     match reverse goal with 
-    | H : @eqb_correct_on _ _ _ |- _ => move=> /=/H{H}-> 
-    end => // (*;
+    | H : @eqb_core_defs.eqb_correct_on _ _ _ |- _ => move=> /=/H{H}->    (* FIXME Enrico : it does not work (in test_eqbcorrect) if we remove use the long path: i.e @eqb_core_defs.eqb_correct_on *)
+    end (*;
     f_equal => //; apply (@UIP_dec bool Bool.bool_dec) *)
   ).
 

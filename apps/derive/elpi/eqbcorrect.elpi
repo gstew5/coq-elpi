@@ -19,9 +19,9 @@ main I Prefix [CL] :- std.do! [
   coq.say {gettimeofday} "1",
 
   induction-db I Indu,
+  coq.say {gettimeofday} "1.3",
   reali (global (indt I)) IR, % param1-db, really
-  coq.typecheck Indu ITy _,
-  coq.say {coq.term->string ITy},
+  coq.say {gettimeofday} "1.6",
   add-indu-correct TI Indu IR Lt-correct R,
   std.assert-ok! (coq.typecheck R Ty) "fail demande a JC", 
   coq.say {coq.term->string R},
@@ -38,7 +38,7 @@ main I Prefix [CL] :- std.do! [
   coq.say {gettimeofday} "3",
 
   CL = eqcorrect-for I Correct Refl,
-  coq.elpi.accumulate _ "derive.eqcorrect.db" (clause _ _ CL),
+  coq.elpi.accumulate _ "derive.eqbcorrect.db" (clause _ _ CL),
 
 ].
 
@@ -155,10 +155,10 @@ add-indu-correct (prod N T F) Indu IR LS {{ fun (a : lp:T) (eqA : a -> a -> bool
 
 add-indu-correct T Indu IR LS {{ fun x => lp:(R x) }} :- 
   std.assert! (param1-inhab-db IR Is_full) "not trivially inhabited",
-  eqb-for T Cmp,
+ % eqb-for T Cmp,
   @pi-decl `x` _ x\
     std.append LS [x, app[Is_full,x]] (Args x),
-    R x = app [Indu, {{ eqb_correct_on lp:Cmp }} | Args x].
+    R x = app [Indu, _ | Args x]. %{{ eqb_correct_on lp:Cmp }}
   
 /******************************** Refl **************************************************************/
 pred add-decl-refl i:string, i:int, i:term, i:constructor, o:term.

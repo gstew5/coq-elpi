@@ -181,7 +181,7 @@ Elpi Export derive.
 (* we derive the Coq prelude *)
 
 Module Prelude.
-Module Empty_set. derive Init.Datatypes.Empty_set "". End Empty_set. 
+(* Module Empty_set. derive Init.Datatypes.Empty_set "". End Empty_set.  *)
 Module unit. derive Init.Datatypes.unit "". End unit.
 Module bool. derive Init.Datatypes.bool "". End bool.
 Module nat. derive Init.Datatypes.nat "". End nat.
