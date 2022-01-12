@@ -11,7 +11,7 @@ Module Coverage.
 (* Fail Elpi derive.eqbcorrect empty.  (* No induction principle *) *)
 Elpi derive.eqbcorrect unit.
 Elpi derive.eqbcorrect peano.
-Elpi derive.eqbcorrect option.
+Fail Elpi derive.eqbcorrect option.
 Fail Elpi derive.eqbcorrect pair.
 Fail Elpi derive.eqbcorrect seq.
 Fail Elpi derive.eqbcorrect rose.
