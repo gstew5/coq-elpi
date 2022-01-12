@@ -2433,11 +2433,23 @@ under_coq2elpi_relctx ~calldepth state params
 (* ********************************* }}} ********************************** *)
 (* ****************************** API ********************************** *)
 
+let ctx_cache = Ephemeron.K1.create ()
+
 let get_current_env_sigma ~depth hyps constraints state =
 (* TODO: cahe longer env in coq_engine for later reuse, use == on hyps+depth? *)
   let state, _, changed, gl1 = elpi_solution_to_coq_solution constraints state in
+  if changed then Ephemeron.K1.unset_data ctx_cache;
   let state, coq_ctx, gl2 =
-    of_elpi_ctx ~calldepth:depth constraints depth (preprocess_context (fun _ -> true) (E.of_hyps hyps)) state (mk_coq_context ~options:(get_options ~depth hyps state) state) in
+    match Ephemeron.K1.(get_key ctx_cache, get_data ctx_cache) with
+    | Some k, Some (c,e) when k == hyps && not changed && e == Global.env () ->
+        (*Printf.eprintf "hit\n";*)
+        state, c, []
+    | _ -> 
+        (* Printf.eprintf "miss\n";*)
+        of_elpi_ctx ~calldepth:depth constraints depth (preprocess_context (fun _ -> true) (E.of_hyps hyps)) state (mk_coq_context ~options:(get_options ~depth hyps state) state)
+  in
+  Ephemeron.K1.set_key ctx_cache hyps;
+  Ephemeron.K1.set_data ctx_cache (coq_ctx,Global.env ());
   state, coq_ctx, get_sigma state, gl1 @ gl2
 ;;
 let get_global_env_current_sigma ~depth hyps constraints state =
