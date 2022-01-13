@@ -3,6 +3,7 @@
 -I ../../src
 
 -R theories elpi.apps
+-Q tests elpi.apps.derive.tests
 
 theories/derive.v
 theories/derive/bcongr.v
