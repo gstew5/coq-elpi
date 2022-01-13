@@ -33,6 +33,8 @@ pred eqb-fields
 eqb-for {{ @is_true lp:X }} {{ fun (_ _ : @is_true lp:X) => true }}.
 eqb-for {{ @eq bool lp:X true }} {{ fun (_ _ : @eq bool lp:X true) => true }}.
    /* Generalize over bool and true, have a list of uip, i.e use  eqcorrect-for */ 
+eqb-for T X :- whd1 T T1, !, eqb-for T1 X. 
+
 }}.
 
 Elpi Command derive.eqb.
