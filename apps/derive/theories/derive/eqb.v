@@ -11,9 +11,13 @@ Elpi Db derive.eqbcorrect.db lp:{{
 
   pred eqcorrect-for
     o:inductive,
-    o:constant, % correct
-    o:constant. % reflexive
-  
+    o:constant. % correct
+/*    o:constant. % reflexive */
+
+  pred correct-lemma-for i:gref, o:term.
+
+/*  pred refl-lemma-for i:gref, o:term. */
+
 }}.
 
 Elpi Db derive.eqb.db lp:{{
