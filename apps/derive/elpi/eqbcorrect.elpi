@@ -6,65 +6,47 @@ main I Prefix CLs :- std.do! [
   % Add error msg if not a inductive ?
   coq.env.indt I _ _ N TI Ks KTs,
 
-  coq.say "",
-  coq.say I,
+  induction-db I Indu,
+  mk-reali (global (indt I)) IR, % param1-db, really
+ 
+  /* Correctness */
 
-  coq.say {gettimeofday} "0",
   std.map2 KTs Ks (add-decl-correct Prefix N (global (indt I))) Lt-correct,
 
- /* coq.say {gettimeofday} "0.5",
-    std.map2 KTs Ks (add-decl-refl Prefix N (global (indt I))) Lt-refl, */
-
-  coq.say {gettimeofday} "1",
-  induction-db I Indu,
-
-  coq.say {gettimeofday} "1.3",
-  reali (global (indt I)) IR, % param1-db, really
-
-  coq.say {gettimeofday} "1.6",
   add-indu-correct TI (global (indt I)) Indu IR Lt-correct R,
-  coq.say {gettimeofday} "1.7",
-  std.assert-ok! (coq.typecheck R Ty) "fail demande a JC", 
+  std.assert-ok! (coq.typecheck R Ty) "derive.eqbcorrect: add-indu-correct generates ill typed term", 
   Name is Prefix ^ "eqb_correct",
   coq.env.add-const Name R Ty @opaque! Correct,
  
-  coq.say {gettimeofday} "1.8",
   add-indu-correct-aux TI (global (indt I)) Indu IR Lt-correct Rx,
-  std.assert-ok! (coq.typecheck Rx Tyx) "fail demande a JC", 
+  std.assert-ok! (coq.typecheck Rx Tyx) "derive.eqbcorrect: add-indu-correct-aux generates ill typed term", 
   Namex is Prefix ^ "eqb_correct_aux",
   coq.env.add-const Namex Rx Tyx @opaque! Correctx,
  
-
-
-  coq.say {gettimeofday} "2",
-
-/*  
+  /* Refl */
+  std.map2 KTs Ks (add-decl-refl Prefix N (global (indt I))) Lt-refl, 
+ 
   add-indu-refl TI (global (indt I)) Indu IR Lt-refl Rr,
-  std.assert-ok! (coq.typecheck Rr Tyr) "fail demande a JC", 
+  std.assert-ok! (coq.typecheck Rr Tyr) "derive.eqbcorrect: add-indu-refl generates ill typed term", 
   Namer is Prefix ^ "eqb_refl",
   coq.env.add-const Namer Rr Tyr @opaque! Refl,
 
-  coq.say {gettimeofday} "2.8",
-  add-indu-refl-aux TI Indu IR Lt-refl Rrx,
-  std.assert-ok! (coq.typecheck Rrx Tyrx) "fail demande a JC", 
+  add-indu-refl-aux TI (global (indt I)) Indu IR Lt-refl Rrx,
+  std.assert-ok! (coq.typecheck Rrx Tyrx) "derive.eqbcorrect: add-indu-refl-aux generates ill typed term", 
   Namerx is Prefix ^ "eqb_refl_aux",
   coq.env.add-const Namerx Rrx Tyrx @opaque! Reflx,
 
-  coq.say {gettimeofday} "3",
-*/
+  /* Add the clauses in the database */
   CLs = [
-    eqcorrect-for I Correct /* Refl */,
+    eqcorrect-for I Correct Refl,
     correct-lemma-for (indt I) (global (const Correctx)),
-/*    refl-lemma-for (indt I) (global (const Reflx)), */
+    refl-lemma-for (indt I) (global (const Reflx)), 
   ],
 
   std.forall CLs (x\coq.elpi.accumulate _ "derive.eqbcorrect.db" (clause _ _ x)),
 
-  coq.say I "done"
-
 ].
 
-/* Enrico : should we still have this here */
 pred run-solver i:sealed-goal, i:string.
 run-solver G Name :-
   if (coq.ltac.open (coq.ltac.call Name []) G []) true
@@ -82,40 +64,6 @@ coq.ctx->string (def X _ Ty B) R :- R is {coq.term->string X} ^ " : " ^ {coq.ter
 
 /************************** correct *********************************************/
 
-/* Build the type */
-
-pred do-params-correct-ty i:int, i:term, i:term, i:term, o:term.
-do-params-correct-ty 0 T I K R :- !, 
-  eqb-for I Cmp,
-  reali I {{ @eqb_correct_on lp:I lp:Cmp }} =>           
-  do-args-correct-ty T K R.
-do-params-correct-ty NP (prod N T F) I K {{ forall (a : lp:T) (eqA : a -> a -> bool), lp:(R a eqA) }} :- NP > 0, !, NP1 is NP - 1,
-  @pi-decl N T a\
-  @pi-decl `eqA` {{ lp:a -> lp:a -> bool }} eqA\
-  eqb-for a eqA =>
-  reali a {{ @eqb_correct_on lp:a lp:eqA }} =>
-    do-params-correct-ty NP1 (F a) {{ lp:I lp:a }} {{ lp:K lp:a }} (R a eqA).
-
-pred do-args-correct-ty i:term, i:term, o:term.
-do-args-correct-ty (prod N T F) K {{ forall (x : lp:T) (Px : lp:EqbOn x), lp:(R x Px) }} :- !,
-  reali T EqbOn, 
-  @pi-decl N T x\
-  @pi-decl `px` {{ lp:EqbOn lp:x }} px\
-     do-args-correct-ty (F x) {{ lp:K lp:x }} (R x px).
-
-do-args-correct-ty T K {{ eqb_correct_on lp:Cmp lp:K }} :- std.do! [
-  eqb-for T Cmp,
-%  coq.safe-dest-app T (global (indt I)) Args,
-%  fields-for I _ _ _ ConstructPC,
-%  coq.mk-app (global (const ConstructPC)) Args ConstructP,
-%  eqb-fields T Fields,
-%  B = {{ @eqb_body_correct _ _ _ _ _ lp:ConstructP lp:Fields lp:K (fun f => _) }},
-%  coq.typecheck {{ lp:B : eqb_correct_on lp:Cmp lp:K }} _ _,
-%  coq.ltac.collect-goals B [G] _,
-%  run-solver G "eqb_correct_on__solver",
-%
-].
-
 pred what-for i:(gref -> term -> prop), i:(term -> term -> prop), i:term, o:term.
 
 pred eqb-correct-aux-for i:term, o:term.
@@ -124,25 +72,19 @@ eqb-correct-aux-for T R :- whd1 T T1, !, eqb-correct-aux-for T1 R.
 eqb-correct-aux-for T R :-
   what-for correct-lemma-for eqb-correct-aux-for T R.
 
+pred eqb-refl-aux-for i:term, o:term.
+eqb-refl-aux-for T R :- whd1 T T1, !, eqb-refl-aux-for T1 R.
 
-/*pred eqb-refl-aux-for i:term, o:term.
 eqb-refl-aux-for T R :-
-  coq.say "eqb-refl-aux-for",               
   what-for refl-lemma-for eqb-refl-aux-for T R.
-*/
+
 what-for What Rec (app [global GR|L]) R :- std.do! [
-  coq.say "ok1",
   What GR Aux,
-  coq.say "ok2",
-  reali (global GR) (global (indt ISGR)),
+  mk-reali (global GR) (global (indt ISGR)),
   param1-functor-for ISGR Funct,
-  coq.say "ok3",
   std.map L Rec Recs,
-  coq.say "ok4",
   apply-functor (global Funct) Recs TOTO,
-  coq.say "ok5",
-  R = {{ fun x H => lp:Aux _ _ x (lp:TOTO x H) }},
-  coq.say "ok6",
+  R = {{ fun x H => lp:Aux _ _ x (lp:TOTO x H) }}
 ].
 
 pred apply-functor i:term, i:list term, o:term.
@@ -152,14 +94,22 @@ apply-functor X [R|RS] TOTO :- apply-functor {{ lp:X _ _ _ lp:R }} RS TOTO.
 pred add-decl-correct i:string, i:int, i:term, i:term, i:constructor, o:term.
 add-decl-correct _Prefix N I KT K R /*(global (const P))*/ :- std.do![  
   do-params-correct N I KT (global (indc K)) R,
-  std.assert-ok! (coq.typecheck R _Ty) "R casse", /* FIXME: is it needed ? */
+  std.assert-ok! (coq.typecheck R _Ty) "R casse", /* FIXME: is it needed ? */ 
 ].
 
-% forall T : Type, T -> list T -> list T --->  forall a eqA, ..R..
-% T : Type |- T -> list T -> list T ---> 
+pred mk-reali i:term, o:term.
+mk-reali T R :- !,
+  std.assert! (reali T R) {calc (
+    "derive.eqbcorrect: no unary parametricity translation for" ^ {coq.term->string T} ^ ", maybe use derive.eqb first")}.
+
+pred mk-eqb-for i:term, o:term.
+mk-eqb-for T R :- !,
+  std.assert! (eqb-for T R) {calc (
+    "derive.eqbcorrect: boolean equality for" ^ {coq.term->string T} ^ ", maybe use derive.eqb first")}.
+
 pred do-params-correct i:int, i:term, i:term, i:term, o:term.
 do-params-correct 0 I T K R :- !, 
-  eqb-for I Cmp,
+  mk-eqb-for I Cmp,
   reali I {{ @eqb_correct_on lp:I lp:Cmp }} =>    
   eqb-correct-aux-for I {{ fun x H => H }} =>       
   do-args-correct T K R.
@@ -168,18 +118,15 @@ do-params-correct NP I (prod N T F) K {{ fun (a : lp:T) (eqA : a -> a -> bool) =
   @pi-decl N T a\
   @pi-decl `eqA` {{ lp:a -> lp:a -> bool }} eqA\
   eqb-for a eqA =>
-  (coq.say "added eqb for" {coq.term->string a},
-
   eqb-correct-aux-for a {{ fun (x: lp:a) (H : @eqb_correct_on lp:a lp:eqA x) => H }} =>
   reali a {{ @eqb_correct_on lp:a lp:eqA }} =>
-    do-params-correct NP1 {coq.mk-app I [a]} (F a) {{ lp:K lp:a }} (R a eqA)).
+    do-params-correct NP1 {coq.mk-app I [a]} (F a) {{ lp:K lp:a }} (R a eqA).
 
 pred do-args-correct i:term, i:term, o:term.
-
 do-args-correct (prod N T F) K {{ fun (x : lp:T) (px : lp:EqbOn x) (h : @eqb_correct_on lp:T lp:Cmp x := lp:View x px) => lp:(R x px h) }} :- !, std.do! [
-  reali T EqbOn, coq.say "ICI1" {coq.term->string T},
-  eqb-for T Cmp, coq.say "ICI2",
-  eqb-correct-aux-for T View, coq.say "ICI3",
+  mk-reali T EqbOn,
+  mk-eqb-for T Cmp, 
+  eqb-correct-aux-for T View, 
   @pi-decl N T x\
   @pi-decl `px` {{ lp:EqbOn lp:x }} px\
   @pi-def `H` {{ @eqb_correct_on lp:T lp:Cmp lp:x }} {{ lp:View lp:x lp:px }} h\
@@ -187,7 +134,7 @@ do-args-correct (prod N T F) K {{ fun (x : lp:T) (px : lp:EqbOn x) (h : @eqb_cor
 ].
  
 do-args-correct T K {{ lp:B : eqb_correct_on lp:Cmp lp:K }} :- std.do! [
-  eqb-for T Cmp,
+  mk-eqb-for T Cmp,
   coq.safe-dest-app T (global (indt I)) Args,
   fields-for I _ _ _ ConstructPC,
   coq.mk-app (global (const ConstructPC)) Args ConstructP,
@@ -213,13 +160,8 @@ add-indu-correct (prod N T F) I Indu IR LS
      {std.map LS (t\coq.mk-app t [a, eqA])} (R a eqA eqAc).
 
 add-indu-correct _T I Indu IR LS {{ fun x => lp:(R x) }} :- std.do![
-  /* FIXME:
-   To build a nicer error 
-   assert! (reali T TR) {calc (
-    "derive.induction: no unary parametricity translation for" ^
-    {coq.term->string T} ^ ", use derive.param1 first")}, */
   std.assert! (param1-inhab-db IR Is_full) "not trivially inhabited",
-  std.assert! (eqb-for I Cmp) "no boolean equality found for ",
+  mk-eqb-for I Cmp, 
   @pi-decl `x` _ x\
     std.append LS [x, app[Is_full,x]] (Args x),
     R x = app [Indu, {{ @eqb_correct_on lp:I lp:Cmp }} | Args x]
@@ -237,10 +179,10 @@ add-indu-correct-aux (prod N T F) I Indu IR LS {{ fun (a : lp:T) (eqA : a -> a -
      {std.map LS (t\coq.mk-app t [a, eqA])} (R a eqA).
 
 add-indu-correct-aux _T I Indu IR LS R :- 
-  std.assert! (eqb-for I Cmp) "no boolean equality found for ", %FIXME Enrico ^ {coq.term->string I},
+  mk-eqb-for I Cmp, 
   R = app [Indu, {{ @eqb_correct_on lp:I lp:Cmp }} | LS].
 
-/*
+
 /******************************** Refl **************************************************************/
 pred add-decl-refl i:string, i:int, i:term, i:term, i:constructor, o:term.
 add-decl-refl _Prefix N I KT K R /*(global (const P))*/ :- std.do![  
@@ -254,27 +196,25 @@ add-decl-refl _Prefix N I KT K R /*(global (const P))*/ :- std.do![
 % T : Type |- T -> list T -> list T ---> 
 pred do-params-refl i:int, i:term, i:term, i:term, o:term.
 do-params-refl 0 I T K R :- !, 
-  coq.say "REFL1",
-  eqb-for I Cmp,
+  mk-eqb-for I Cmp,
   reali I {{ @eqb_refl_on lp:I lp:Cmp }} => 
+  eqb-refl-aux-for I {{ fun x H => H }} => 
   do-args-refl T K R.
 
 do-params-refl NP I (prod N T F) K {{ fun (a : lp:T) (eqA : a -> a -> bool) => lp:(R a eqA) }} :- NP > 0, !, NP1 is NP - 1,
-  coq.say "REFL2",
   @pi-decl N T a\
   @pi-decl `eqA` {{ lp:a -> lp:a -> bool }} eqA\
   eqb-for a eqA =>
+  eqb-refl-aux-for a {{ fun (x: lp:a) (H : @eqb_refl_on lp:a lp:eqA x) => H }} =>
   reali a {{ @eqb_refl_on lp:a lp:eqA }} =>
-    do-params-refl NP1 {{ lp:I lp:a }} (F a) {{ lp:K lp:a }} (R a eqA).
+    do-params-refl NP1 { coq.mk-app I [a] } (F a) {{ lp:K lp:a }} (R a eqA).
 
 
 pred do-args-refl i:term, i:term, o:term.
 do-args-refl (prod N T F) K {{ fun (x : lp:T) (px : lp:EqbOn x) (h : @eqb_refl_on lp:T lp:Cmp x := lp:View x px) => lp:(R x px h) }} :- !, std.do![
-  coq.say "REFLA1",
-  reali T EqbOn, 
-  eqb-for T Cmp,
+  mk-reali T EqbOn, 
+  mk-eqb-for T Cmp,
   eqb-refl-aux-for T View,
-  coq.say "REFLA1--",
   @pi-decl N T x\
   @pi-decl `px` {{ eqb_refl_on lp:Cmp lp:x }} px\
   @pi-def `H` {{ @eqb_refl_on lp:T lp:Cmp lp:x }} {{ lp:View lp:x lp:px }} h\
@@ -282,14 +222,13 @@ do-args-refl (prod N T F) K {{ fun (x : lp:T) (px : lp:EqbOn x) (h : @eqb_refl_o
 ].
 
 do-args-refl T K {{ lp:B : eqb_refl_on lp:Cmp lp:K }} :- std.do! [
-  coq.say "REFLA2",
   coq.safe-dest-app T (global (indt I)) Args,
   tag-for I TagC,
   fields-for I Fields_tC FieldsC _ _,
   coq.mk-app (global (const TagC)) Args Tag,
   coq.mk-app (global (const Fields_tC)) Args Fields_t,
   coq.mk-app (global (const FieldsC)) Args Fields,
-  eqb-for T Cmp,
+  mk-eqb-for T Cmp,
   eqb-fields T EqbFields,
   B = {{ @eqb_body_refl lp:T lp:Tag lp:Fields_t lp:Fields lp:EqbFields lp:K _ }},
   std.assert-ok! (coq.typecheck {{ lp:B (*: eqb_refl_on lp:Cmp lp:K*) }} _) "illtyped",
@@ -308,30 +247,29 @@ add-indu-refl (prod N T F) I Indu IR LS {{ fun (a : lp:T) (eqA : a -> a -> bool)
      { coq.mk-app I [a] }
      {{ lp:Indu lp:a (@eqb_refl_on lp:a lp:eqA)}} 
      {{ lp:IR lp:a (@eqb_refl_on lp:a lp:eqA)}} 
-     {std.map LS (t\coq.mk-app t [a, eqA])} (R a eqA eqAr)).
+     {std.map LS (t\coq.mk-app t [a, eqA])} (R a eqA eqAr).
 
 add-indu-refl _T I Indu IR LS {{ fun x => lp:(R x) }} :- 
   std.assert! (param1-inhab-db IR Is_full) "not trivially inhabited",
-  eqb-for I Cmp,  
+  mk-eqb-for I Cmp,  
   @pi-decl `x` _ x\
     std.append LS [x, app[Is_full,x]] (Args x),
     R x = app [Indu, {{ eqb_refl_on lp:Cmp }} | Args x].
 
-pred add-indu-refl-aux i:term, i:term, i:term, i:list term, o:term.
-add-indu-refl-aux (prod N T F) Indu IR LS {{ fun (a : lp:T) (eqA : a -> a -> bool) => lp:(R a eqA) }} :- !,
-  coq.say "ICI1",                
+pred add-indu-refl-aux i:term, i:term, i:term, i:term, i:list term, o:term.
+add-indu-refl-aux (prod N T F) I Indu IR LS {{ fun (a : lp:T) (eqA : a -> a -> bool) => lp:(R a eqA) }} :- !,
   @pi-decl N T a\
   @pi-decl `eqA` {{ lp:a -> lp:a -> bool }} eqA\
+  eqb-for a eqA => 
   add-indu-refl-aux (F a) 
+     { coq.mk-app I [a] }
      {{ lp:Indu lp:a (@eqb_refl_on lp:a lp:eqA)}} 
      {{ lp:IR lp:a (@eqb_refl_on lp:a lp:eqA)}} 
      {std.map LS (t\coq.mk-app t [a, eqA])} (R a eqA).
-add-indu-refl-aux _T Indu IR LS R :- 
-    coq.say "ICI2",                
-    R = app [Indu, _ | LS],
-    coq.say "ICI3".
 
-*/
- 
+add-indu-refl-aux _T I Indu IR LS R :- std.do![
+    mk-eqb-for I Cmp,              
+    R = app [Indu, {{ @eqb_refl_on lp:I lp:Cmp}} | LS]
+].
 }
 

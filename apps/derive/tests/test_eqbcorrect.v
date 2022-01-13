@@ -15,17 +15,12 @@ Module Coverage.
 
 (* Elpi Trace (* "derive.eqbcorrect.*" "derive.param1.functor.*" "correct-lemma-for" *) "param1-functor-for". *)
 Elpi derive.eqbcorrect empty.  (* No induction principle *) 
-
 Elpi derive.eqbcorrect unit. 
-
 Elpi derive.eqbcorrect peano.
 Elpi derive.eqbcorrect option.
-
 Elpi derive.eqbcorrect pair.
 Elpi derive.eqbcorrect seq.
-
 Elpi derive.eqbcorrect rose.
-
 Fail Elpi derive.eqbcorrect nest. (* Maybe fixable *)
 Fail Elpi derive.eqbcorrect w.    (* Not fixable *)
 Fail Elpi derive.eqbcorrect vect. (* Can be done *)
