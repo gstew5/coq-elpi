@@ -30,7 +30,6 @@ Elpi derive.eqb prim_int.
 Elpi derive.eqb prim_float.
 Elpi derive.eqb fo_record.
 Elpi derive.eqb pa_record.
-Elpi Trace "derive.eqb.*".
 Fail Elpi derive.eqb pr_record. (* fixme elaborate *)
 Elpi derive.eqb dep_record.
 Elpi derive.eqb enum.
