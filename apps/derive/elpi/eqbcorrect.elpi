@@ -78,13 +78,22 @@ eqb-refl-aux-for T R :- whd1 T T1, !, eqb-refl-aux-for T1 R.
 eqb-refl-aux-for T R :-
   what-for refl-lemma-for eqb-refl-aux-for T R.
 
-what-for What Rec (app [global GR|L]) R :- std.do! [
+what-for What Rec GRL R :- std.do! [
+  coq.safe-dest-app GRL (global GR) L,
   What GR Aux,
   mk-reali (global GR) (global (indt ISGR)),
   param1-functor-for ISGR Funct,
   std.map L Rec Recs,
   apply-functor (global Funct) Recs TOTO,
-  R = {{ fun x H => lp:Aux _ _ x (lp:TOTO x H) }}
+  apply-aux Aux L Aux1, 
+  R = {{ fun x H => lp:Aux1 x (lp:TOTO x H) }}
+].
+
+pred apply-aux i:term, i:list term, o:term.
+apply-aux Aux [] Aux.
+apply-aux Aux [T|L] Aux1 :- !, std.do![
+  mk-eqb-for T EQB,
+  apply-aux {{ lp:Aux lp:T lp:EQB }} L Aux1
 ].
 
 pred apply-functor i:term, i:list term, o:term.
@@ -100,12 +109,12 @@ add-decl-correct _Prefix N I KT K R /*(global (const P))*/ :- std.do![
 pred mk-reali i:term, o:term.
 mk-reali T R :- !,
   std.assert! (reali T R) {calc (
-    "derive.eqbcorrect: no unary parametricity translation for" ^ {coq.term->string T} ^ ", maybe use derive.eqb first")}.
+    "derive.eqbcorrect: no unary parametricity translation for " ^ {coq.term->string T} ^ ", use derive.param1 first")}.
 
 pred mk-eqb-for i:term, o:term.
 mk-eqb-for T R :- !,
   std.assert! (eqb-for T R) {calc (
-    "derive.eqbcorrect: boolean equality for" ^ {coq.term->string T} ^ ", maybe use derive.eqb first")}.
+    "derive.eqbcorrect: boolean equality for " ^ {coq.term->string T} ^ ", maybe use derive.eqb first")}.
 
 pred do-params-correct i:int, i:term, i:term, i:term, o:term.
 do-params-correct 0 I T K R :- !, 
