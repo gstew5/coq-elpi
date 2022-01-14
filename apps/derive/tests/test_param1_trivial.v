@@ -18,6 +18,7 @@ Elpi derive.param1.trivial is_box_peano.
 Fail Elpi derive.param1.trivial is_nest.
 Elpi derive.param1.trivial is_rose.
 Elpi derive.param1.trivial is_rose_p.
+Elpi derive.param1.trivial is_rose_o.
 Fail Elpi derive.param1.trivial is_w.
 Fail Elpi derive.param1.trivial is_vect.
 Fail Elpi derive.param1.trivial is_dyn.

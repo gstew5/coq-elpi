@@ -21,6 +21,7 @@ Elpi derive.eqcorrect seq.
 Elpi derive.eqcorrect box_peano.
 Elpi derive.eqcorrect rose.
 Elpi derive.eqcorrect rose_p.
+Elpi derive.eqcorrect rose_o.
 Fail Elpi derive.eqcorrect nest.
 Fail Elpi derive.eqcorrect w.
 Fail Elpi derive.eqcorrect vect.

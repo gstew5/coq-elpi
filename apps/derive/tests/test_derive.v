@@ -11,6 +11,7 @@ Elpi derive Coverage.seq.
 Elpi derive Coverage.box_peano.
 Elpi derive Coverage.rose.
 Elpi derive Coverage.rose_p.
+Elpi derive Coverage.rose_o.
 Elpi derive Coverage.nest.
 Elpi derive Coverage.w.
 Elpi derive Coverage.vect.

@@ -12,6 +12,7 @@ Elpi derive.eq seq.
 Elpi derive.eq box_peano.
 Elpi derive.eq rose.
 Elpi derive.eq rose_p.
+Elpi derive.eq rose_o.
 Fail Elpi derive.eq nest.
 Fail Elpi derive.eq w.
 Elpi derive.eq vect.

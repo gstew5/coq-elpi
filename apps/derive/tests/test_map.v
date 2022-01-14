@@ -14,6 +14,7 @@ Elpi derive.map seq.
 Elpi derive.map box_peano.
 Elpi derive.map rose.
 Elpi derive.map rose_p.
+Elpi derive.map rose_o.
 Fail Elpi derive.map nest.
 Fail Elpi derive.map w.
 Elpi derive.map vect.

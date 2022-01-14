@@ -13,6 +13,7 @@ Elpi derive.projK seq.
 Elpi derive.projK box_peano.
 Elpi derive.projK rose.
 Elpi derive.projK rose_p.
+Elpi derive.projK rose_o.
 Elpi derive.projK nest.
 Elpi derive.projK w.
 Elpi derive.projK vect.

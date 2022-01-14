@@ -14,6 +14,7 @@ Elpi derive.param1 seq.
 Elpi derive.param1 box_peano.
 Elpi derive.param1 rose.
 Elpi derive.param1 rose_p.
+Elpi derive.param1 rose_o.
 Elpi derive.param1 nest.
 Elpi derive.param1 w.
 Elpi derive.param1 vect.

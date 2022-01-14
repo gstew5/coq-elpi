@@ -15,6 +15,7 @@ Elpi derive.param1.functor is_seq.
 Elpi derive.param1.functor is_box_peano.
 Elpi derive.param1.functor is_rose.
 Elpi derive.param1.functor is_rose_p.
+Elpi derive.param1.functor is_rose_o.
 Elpi derive.param1.functor is_nest.
 Fail Elpi derive.param1.functor is_w.
 
