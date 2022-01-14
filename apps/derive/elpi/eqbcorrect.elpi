@@ -79,16 +79,21 @@ eqb-refl-aux-for T R :- whd1 T T1, !, eqb-refl-aux-for T1 R.
 eqb-refl-aux-for T R :-
   what-for refl-lemma-for eqb-refl-aux-for T R.
 
-what-for What Rec GRL R :- std.do! [
-  coq.safe-dest-app GRL GR L,
+what-for What Rec (app [GR | L] as GRL) R :- !, std.do! [
+/*  coq.safe-dest-app GRL GR L, */
   What GR Aux,
   mk-reali GR (global (indt ISGR)),
   param1-functor-for ISGR Funct,
   std.map L Rec Recs,
   apply-functor (global Funct) Recs TOTO,
   apply-aux Aux L Aux1, 
-  R = {{ fun x H => lp:Aux1 x (lp:TOTO x H) }}
+  R = {{ fun (x:lp:GRL) H => lp:Aux1 x (lp:TOTO x H) }}
 ].
+
+what-for What Rec GR R :- std.do! [
+  What GR Aux,
+  R = {{ fun (x:lp:GR) H => lp:Aux x H }}
+]. 
 
 pred apply-aux i:term, i:list term, o:term.
 apply-aux Aux [] Aux.
@@ -104,7 +109,7 @@ apply-functor X [R|RS] TOTO :- apply-functor {{ lp:X _ _ _ lp:R }} RS TOTO.
 pred add-decl-correct i:string, i:int, i:term, i:term, i:constructor, o:term.
 add-decl-correct _Prefix N I KT K R /*(global (const P))*/ :- std.do![  
   do-params-correct N I KT (global (indc K)) R,
-  std.assert-ok! (coq.typecheck R _Ty) "R case", /* FIXME: is it needed ? */ 
+  std.assert-ok! (coq.typecheck R _Ty) {coq.term->string R}, %"R case", /* FIXME: is it needed ? */ 
 ].
 
 pred mk-reali i:term, o:term.

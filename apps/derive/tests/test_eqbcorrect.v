@@ -45,7 +45,8 @@ Elpi Accumulate derive.eqbcorrect.db lp:{{refl-lemma-for {{PrimInt63.int}} {{int
 *)
 Fail Elpi derive.eqbcorrect prim_int.
 Fail Elpi derive.eqbcorrect prim_float. (* Can not work, we don't have a syntaxtic test *)
-Fail Elpi derive.eqbcorrect fo_record.
+
+Elpi derive.eqbcorrect fo_record.
 Elpi derive.eqbcorrect pa_record.
 Fail Elpi derive.eqbcorrect pr_record. 
 Fail Elpi derive.eqbcorrect dep_record.
