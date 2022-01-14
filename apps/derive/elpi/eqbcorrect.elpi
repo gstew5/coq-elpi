@@ -39,8 +39,8 @@ main I Prefix CLs :- std.do! [
   /* Add the clauses in the database */
   CLs = [
     eqcorrect-for I Correct Refl,
-    correct-lemma-for (indt I) (global (const Correctx)),
-    refl-lemma-for (indt I) (global (const Reflx)), 
+    correct-lemma-for (global (indt I)) (global (const Correctx)),
+    refl-lemma-for (global (indt I)) (global (const Reflx)), 
   ],
 
   std.forall CLs (x\coq.elpi.accumulate _ "derive.eqbcorrect.db" (clause _ _ x)),
@@ -64,7 +64,7 @@ coq.ctx->string (def X _ Ty B) R :- R is {coq.term->string X} ^ " : " ^ {coq.ter
 
 /************************** correct *********************************************/
 
-pred what-for i:(gref -> term -> prop), i:(term -> term -> prop), i:term, o:term.
+pred what-for i:(term -> term -> prop), i:(term -> term -> prop), i:term, o:term.
 
 pred eqb-correct-aux-for i:term, o:term.
 eqb-correct-aux-for T R :- whd1 T T1, !, eqb-correct-aux-for T1 R.
@@ -79,14 +79,9 @@ eqb-refl-aux-for T R :-
   what-for refl-lemma-for eqb-refl-aux-for T R.
 
 what-for What Rec GRL R :- std.do! [
-  coq.safe-dest-app GRL (global GR) L,
+  coq.safe-dest-app GRL GR L,
   What GR Aux,
-  mk-reali (global GR) (global (indt ISGR)),
-  param1-functor-for ISGR Funct,
-  std.map L Rec Recs,
-  apply-functor (global Funct) Recs TOTO,
-  apply-aux Aux L Aux1, 
-  R = {{ fun x H => lp:Aux1 x (lp:TOTO x H) }}
+  apply-aux Aux L R, 
 ].
 
 pred apply-aux i:term, i:list term, o:term.
@@ -120,14 +115,14 @@ pred do-params-correct i:int, i:term, i:term, i:term, o:term.
 do-params-correct 0 I T K R :- !, 
   mk-eqb-for I Cmp,
   reali I {{ @eqb_correct_on lp:I lp:Cmp }} =>    
-  eqb-correct-aux-for I {{ fun x H => H }} =>       
+  eqb-correct-aux-for I {{ fun x H => H }} => 
   do-args-correct T K R.
 
 do-params-correct NP I (prod N T F) K {{ fun (a : lp:T) (eqA : a -> a -> bool) => lp:(R a eqA) }} :- NP > 0, !, NP1 is NP - 1,
   @pi-decl N T a\
   @pi-decl `eqA` {{ lp:a -> lp:a -> bool }} eqA\
   eqb-for a eqA =>
-  eqb-correct-aux-for a {{ fun (x: lp:a) (H : @eqb_correct_on lp:a lp:eqA x) => H }} =>
+  eqb-correct-aux-for a {{ fun (x: lp:a) (H : @eqb_correct_on lp:a lp:eqA x) => H }} => 
   reali a {{ @eqb_correct_on lp:a lp:eqA }} =>
     do-params-correct NP1 {coq.mk-app I [a]} (F a) {{ lp:K lp:a }} (R a eqA).
 
