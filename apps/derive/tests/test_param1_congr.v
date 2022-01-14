@@ -13,8 +13,10 @@ Elpi derive.param1.congr is_peano.
 Elpi derive.param1.congr is_option.
 Elpi derive.param1.congr is_pair.
 Elpi derive.param1.congr is_seq.
+Elpi derive.param1.congr is_box_peano.
 Elpi derive.param1.congr is_nest.
 Elpi derive.param1.congr is_rose.
+Elpi derive.param1.congr is_rose_p.
 Elpi derive.param1.congr is_w.
 Elpi derive.param1.congr is_vect.
 Elpi derive.param1.congr is_dyn.

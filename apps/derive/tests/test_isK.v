@@ -10,7 +10,9 @@ Elpi derive.isK peano.
 Elpi derive.isK option.
 Elpi derive.isK pair.
 Elpi derive.isK seq.
+Elpi derive.isK box_peano.
 Elpi derive.isK rose.
+Elpi derive.isK rose_p.
 Elpi derive.isK nest.
 Elpi derive.isK w.
 Elpi derive.isK vect.

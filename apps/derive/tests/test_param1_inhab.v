@@ -13,8 +13,10 @@ Elpi derive.param1.inhab is_peano.
 Elpi derive.param1.inhab is_option.
 Elpi derive.param1.inhab is_pair.
 Elpi derive.param1.inhab is_seq.
+Elpi derive.param1.inhab is_box_peano.
 Fail Elpi derive.param1.inhab is_nest.
 Elpi derive.param1.inhab is_rose.
+Elpi derive.param1.inhab is_rose_p.
 Elpi derive.param1.inhab is_w.
 Fail Elpi derive.param1.inhab is_vect.
 Fail Elpi derive.param1.inhab is_dyn.

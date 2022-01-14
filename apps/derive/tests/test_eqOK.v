@@ -16,7 +16,9 @@ Elpi derive.eqOK peano.
 Elpi derive.eqOK option.
 Elpi derive.eqOK pair.
 Elpi derive.eqOK seq.
+Elpi derive.eqOK box_peano.
 Elpi derive.eqOK rose.
+Elpi derive.eqOK rose_p.
 Fail Elpi derive.eqOK nest.
 Fail Elpi derive.eqOK w.
 Fail Elpi derive.eqOK vect.

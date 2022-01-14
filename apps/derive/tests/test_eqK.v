@@ -21,7 +21,9 @@ Elpi derive.eqK peano.
 Elpi derive.eqK option.
 Elpi derive.eqK pair.
 Elpi derive.eqK seq.
+Elpi derive.eqK box_peano.
 Elpi derive.eqK rose.
+Elpi derive.eqK rose_p.
 Fail Elpi derive.eqK nest.
 Fail Elpi derive.eqK w.
 Fail Elpi derive.eqK vect.

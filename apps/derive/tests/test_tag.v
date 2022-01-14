@@ -11,7 +11,9 @@ Elpi derive.tag peano.
 Elpi derive.tag option.
 Elpi derive.tag pair.
 Elpi derive.tag seq.
+Elpi derive.tag box_peano.
 Elpi derive.tag rose.
+Elpi derive.tag rose_p.
 Elpi derive.tag nest.
 Elpi derive.tag w.
 Elpi derive.tag vect.

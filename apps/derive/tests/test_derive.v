@@ -8,7 +8,9 @@ Elpi derive Coverage.peano.
 Elpi derive Coverage.option.
 Elpi derive Coverage.pair.
 Elpi derive Coverage.seq.
+Elpi derive Coverage.box_peano.
 Elpi derive Coverage.rose.
+Elpi derive Coverage.rose_p.
 Elpi derive Coverage.nest.
 Elpi derive Coverage.w.
 Elpi derive Coverage.vect.

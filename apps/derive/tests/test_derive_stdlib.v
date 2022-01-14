@@ -16,7 +16,11 @@ Inductive pair A B := Comma (a : A) (b : B).
 
 Inductive seq A := Nil | Cons (x : A) (xs : seq A).
 
+Inductive box_peano := Box (n:peano).
+
 Inductive rose (A : Type) := Leaf (a : A) | Node (sib : seq (rose A)).
+
+Inductive rose_p (A B : Type) := Leafp (p : pair A B) | Nodep (sib : pair (rose_p A B) (rose_p A B)).
 
 Inductive nest A := NilN | ConsN (x : A) (xs : nest (pair A A)).
 

@@ -11,7 +11,9 @@ Elpi derive.eqb peano.
 Elpi derive.eqb option.
 Elpi derive.eqb pair.
 Elpi derive.eqb seq.
+Elpi derive.eqb box_peano.
 Elpi derive.eqb rose.
+Elpi derive.eqb rose_p.
 Fail Elpi derive.eqb nest.
 Elpi derive.eqb w.
 Fail Elpi derive.eqb vect.
@@ -21,8 +23,8 @@ Elpi derive.eqb beta.
 Fail Elpi derive.eqb iota.
 (* Elpi derive.eqb large. *)
 (* TODO move this else where *)
-(* Elpi Accumulate derive.eqb.db lp:{{eqb-for {{PrimInt63.int}} {{PrimInt63.eqb}}. }}. *)
-(* Elpi Accumulate derive.eqb.db lp:{{eqb-for {{PrimFloat.int}} {{PrimFloat.eqb}}. }}. *)
+Elpi Accumulate derive.eqb.db lp:{{eqb-for {{PrimInt63.int}} {{PrimInt63.eqb}}. }}.
+Elpi Accumulate derive.eqb.db lp:{{eqb-for {{PrimFloat.float}} {{PrimFloat.eqb}}. }}.
 Elpi derive.eqb prim_int.
 Elpi derive.eqb prim_float.
 Elpi derive.eqb fo_record.

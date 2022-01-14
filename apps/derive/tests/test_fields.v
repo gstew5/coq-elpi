@@ -11,7 +11,9 @@ Elpi derive.fields peano.
 Elpi derive.fields option.
 Elpi derive.fields pair.
 Elpi derive.fields seq.
+Elpi derive.fields box_peano.
 Elpi derive.fields rose.
+Elpi derive.fields rose_p.
 Fail Elpi derive.fields nest.
 Elpi derive.fields w.
 Fail Elpi derive.fields vect.

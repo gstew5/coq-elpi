@@ -12,7 +12,9 @@ Elpi derive.bcongr peano.
 Elpi derive.bcongr option.
 Elpi derive.bcongr pair.
 Elpi derive.bcongr seq.
+Elpi derive.bcongr box_peano.
 Elpi derive.bcongr rose.
+Elpi derive.bcongr rose_p.
 Elpi derive.bcongr nest.
 Elpi derive.bcongr w.
 Fail Elpi derive.bcongr vect.

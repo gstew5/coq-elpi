@@ -20,15 +20,29 @@ Elpi derive.eqbcorrect peano.
 Elpi derive.eqbcorrect option.
 Elpi derive.eqbcorrect pair.
 Elpi derive.eqbcorrect seq.
+Elpi derive.eqbcorrect box_peano.
 Elpi derive.eqbcorrect rose.
+Elpi derive.eqbcorrect rose_p.
 Fail Elpi derive.eqbcorrect nest. (* Maybe fixable *)
 Fail Elpi derive.eqbcorrect w.    (* Not fixable *)
 Fail Elpi derive.eqbcorrect vect. (* Can be done *)
 Fail Elpi derive.eqbcorrect dyn.  (* Not Fixable *)
 Fail Elpi derive.eqbcorrect zeta. (* FIXME *)
-Elpi derive.eqbcorrect beta. 
+Elpi derive.eqbcorrect beta.
 Fail Elpi derive.eqbcorrect iota.
-Fail Elpi derive.eqbcorrect prim_int.
+
+
+Lemma int_eqb_correct_aux : forall (n:PrimInt63.int), param1.is_uint63 n -> eqb_correct_on Uint63.eqb n.
+Proof. move=> n _; apply /Uint63.eqb_correct. Qed.
+
+Lemma int_eqb_refl_aux : forall (n:PrimInt63.int), param1.is_uint63 n -> eqb_refl_on Uint63.eqb n.
+Proof. move=> n _; apply /Uint63.eqb_refl. Qed.
+
+Elpi Accumulate derive.eqbcorrect.db lp:{{correct-lemma-for {{PrimInt63.int}} {{int_eqb_correct_aux}}. }}.
+Elpi Accumulate derive.eqbcorrect.db lp:{{refl-lemma-for {{PrimInt63.int}} {{int_eqb_refl_aux}}. }}.
+Elpi Trace "derive.eqbcorrect.*" "correct-lemma-for".
+
+Elpi derive.eqbcorrect prim_int.
 Fail Elpi derive.eqbcorrect prim_float.
 Fail Elpi derive.eqbcorrect fo_record.
 Fail Elpi derive.eqbcorrect pa_record.

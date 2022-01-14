@@ -13,7 +13,9 @@ Elpi derive.induction peano.
 Elpi derive.induction option.
 Elpi derive.induction pair.
 Elpi derive.induction seq.
+Elpi derive.induction box_peano.
 Elpi derive.induction rose.
+Elpi derive.induction rose_p.
 Elpi derive.induction nest.
 Elpi derive.induction w.
 Elpi derive.induction vect.
