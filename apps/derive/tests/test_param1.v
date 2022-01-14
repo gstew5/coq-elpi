@@ -30,7 +30,7 @@ Elpi derive.param1 pa_record.
 Elpi derive.param1 pr_record.
 Elpi derive.param1 dep_record.
 Elpi derive.param1 enum.
-
+Fail Elpi derive.param1 sigma_bool.
 End Coverage.
 
 Import Coverage.

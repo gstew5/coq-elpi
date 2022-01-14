@@ -32,6 +32,7 @@ Elpi derive.induction pa_record.
 Elpi derive.induction pr_record.
 Elpi derive.induction dep_record.
 Elpi derive.induction enum.
+Elpi derive.induction sigma_bool.
 End Coverage.
 
 Import Coverage.
